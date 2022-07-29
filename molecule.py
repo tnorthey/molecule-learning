@@ -3,36 +3,16 @@ class molecule:
         pass
 
     def read_xyz(self, fname):
-        """
-        ##################################################
-        # read_xyz:	Reads xyz file 'fname'
-        # Inputs:	fname, the file name of the xyz file to read
-        # Outputs: 	AtomList (string list), list of atomic labels;
-        # 		Coords (float list), coordinates as column vector with the format X1,Y1,Z1,X2,Y2,Z2,...
-        ##################################################
-        """
-        AtomList = []
-        c = 0
-        with open(fname, "r") as f:  # open file
-            for line in f:
-                c += 1
-                if c == 1:
-                    pass
-                elif c == 2:
-                    comment = line
-                elif c == 3:
-                    AtomList.append(line.split()[0])  # List of atomic labels
-                    coords = line.split()[1:4]
-                    Coords = np.asarray(coords)
-                    print(Coords)
-                else:
-                    AtomList.append(line.split()[0])  # List of atomic labels
-                    coords = np.asarray(line.split()[1:4])
-                    Coords = np.stack((Coords, coords))
-                    Coords = np.vsplit(Coords, 2)
-                    print(Coords)
-        ##################################################dd
-        return AtomList, Coords, comment
+        """Read a .xyz file """
+        with open(fname, 'r') as xyzfile:
+            xyzheader = int(xyzfile.readline())
+            comment = xyzfile.readline()
+            chargearray = zeros((xyzheader, 1))
+            xyzmatrix = loadtxt(fname, skiprows=2, usecols=[1, 2, 3])
+            atominfoarray = loadtxt(fname, skiprows=2, dtype=str, usecols=[0])
+            chargearray = [periodicfunc(symbol) for symbol in atominfoarray]
+        return xyzheader, comment, atominfoarray, chargearray, xyzmatrix
+
 
     def write_xyz(self, AtomList, Coords, fname, comment):
         """
