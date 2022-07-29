@@ -1,16 +1,28 @@
+import numpy as np
+
 class molecule:
     def __init__(self):
         pass
+
+    def periodicfunc(self, element):
+        """ Outputs atomic number for each element in the periodic table """
+        with open("pt.txt") as f:
+            for line in f:
+                if line.split()[0] == element:
+                    atomnum = line.split()[1]
+                    break
+        return int(atomnum)
+
 
     def read_xyz(self, fname):
         """Read a .xyz file """
         with open(fname, 'r') as xyzfile:
             xyzheader = int(xyzfile.readline())
             comment = xyzfile.readline()
-            chargearray = zeros((xyzheader, 1))
-            xyzmatrix = loadtxt(fname, skiprows=2, usecols=[1, 2, 3])
-            atominfoarray = loadtxt(fname, skiprows=2, dtype=str, usecols=[0])
-            chargearray = [periodicfunc(symbol) for symbol in atominfoarray]
+            #chargearray = zeros((xyzheader, 1))
+            xyzmatrix = np.loadtxt(fname, skiprows=2, usecols=[1, 2, 3])
+            atominfoarray = np.loadtxt(fname, skiprows=2, dtype=str, usecols=[0])
+            chargearray = [self.periodicfunc(symbol) for symbol in atominfoarray]
         return xyzheader, comment, atominfoarray, chargearray, xyzmatrix
 
 
@@ -113,33 +125,13 @@ class molecule:
 
         return cm
 
-    def periodicfunc(self, element):
-        """
-        A function to output atomic number for each element in the periodic table
-        """
-        with open("pt.txt") as f:
-            print(f)
-            print(element)
-            for line in f:
-                if line.split()[0] == element:
-                    atomnum = line.split()[1]
-                    break
-        return int(atomnum)
 
     def coulombmat(self, fname, dim):
         """
         This function takes in an xyz input file for a molecule, number of atoms in the biggest molecule  to computes the corresponding coulomb Matrix
         """
-        xyzfile = open(fname)
-        xyzheader = int(xyzfile.readline())
-        xyzfile.close()
-        i = 0
-        j = 0
-        cij = zeros((dim, dim))
-        chargearray = zeros((xyzheader, 1))
-        xyzmatrix = loadtxt(fname, skiprows=2, usecols=[1, 2, 3])
-        atominfoarray = loadtxt(fname, skiprows=2, dtype=str, usecols=[0])
-        chargearray = [periodicfunc(symbol) for symbol in atominfoarray]
+        xyzheader, comment, atominfoarray, chargearray, xyzmatrix = self.read_xyz(fname)
+        cij = np.zeros((dim, dim))
 
         for i in range(xyzheader):
             for j in range(xyzheader):
@@ -148,7 +140,7 @@ class molecule:
                         0.5 * chargearray[i] ** 2.4
                     )  # Diagonal term described by Potential energy of isolated atom
                 else:
-                    dist = linalg.norm(xyzmatrix[i, :] - xyzmatrix[j, :])
+                    dist = np.linalg.norm(xyzmatrix[i, :] - xyzmatrix[j, :])
                     cij[i, j] = (
                         chargearray[i] * chargearray[j] / dist
                     )  # Pair-wise repulsion
