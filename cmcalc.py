@@ -11,20 +11,19 @@ def cmcalc(natm, atmtyp, xc, yc, zc, cm, rcm, mx, m, rcm_on):
     logical :: rcm_on
     """
 
-    #! convert atom type list to atomic number Z
+    # convert atom type list to atomic number Z
     z = atomtype2z(atomtype)
 
-    #! sort by atomic number (z) then loop over sorted indices to create CM
-    #! Implement this here <----------
+    # sort by atomic number (z) then loop over sorted indices to create CM
+    # Implement this here <----------
 
-    #! diagonal elements
+    # diagonal elements
     for i in range(natm):
         cm[i, i] = 0.5 * z[i] ** 2.4
 
-    #! OFF DIAGONALS
+    # OFF DIAGONALS
     for i in range(natm):
         for j in range(i, natm):
-            # do j=i+1,natm
             dist = (
                 (xc[i] - xc[j]) ** 2 + (yc[i] - yc[j]) ** 2 + (zc[i] - zc[j]) ** 2
             ) ** 0.5
@@ -32,8 +31,9 @@ def cmcalc(natm, atmtyp, xc, yc, zc, cm, rcm, mx, m, rcm_on):
                 cm[i, j] = z[i] * z[j] / dist
             else:
                 cm[i, j] = 0.0
-                #! other side of diagonal is equivalent
-                cm[j, i] = cm[i, j]
+            # other side of diagonal is equivalent
+            cm[j, i] = cm[i, j]
+                
     """ 
     #! CALCULATE REDUCED CM OR MODIFIED FULL CM
     106 format(f12.8)
