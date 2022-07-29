@@ -1,8 +1,8 @@
 class molecule:
-    def __init__():
+    def __init__(self):
         pass
-    
-    def read_xyz(fname):
+
+    def read_xyz(self, fname):
         """
         ##################################################
         # read_xyz:	Reads xyz file 'fname'
@@ -11,25 +11,30 @@ class molecule:
         # 		Coords (float list), coordinates as column vector with the format X1,Y1,Z1,X2,Y2,Z2,...
         ##################################################
         """
+        AtomList = []
+        c = 0
         with open(fname, "r") as f:  # open file
-            AtomList = []
-            Coords = []
-            c = 0
             for line in f:
                 c += 1
                 if c == 1:
                     pass
                 elif c == 2:
                     comment = line
+                elif c == 3:
+                    AtomList.append(line.split()[0])  # List of atomic labels
+                    coords = line.split()[1:4]
+                    Coords = np.asarray(coords)
+                    print(Coords)
                 else:
                     AtomList.append(line.split()[0])  # List of atomic labels
-                    for i in range(1, 4):
-                        Coords.append(float(line.split()[i]))
+                    coords = np.asarray(line.split()[1:4])
+                    Coords = np.stack((Coords, coords))
+                    Coords = np.vsplit(Coords, 2)
+                    print(Coords)
         ##################################################dd
         return AtomList, Coords, comment
-    
-    
-    def write_xyz(AtomList, Coords, fname, comment):
+
+    def write_xyz(self, AtomList, Coords, fname, comment):
         """
         ##################################################
         # write_xyz: Write xyz file 'fname' using atom list 'AtomList'
@@ -67,9 +72,9 @@ class molecule:
         ##################################################
         return
 
-
-    def cmcalc(natm, atmtyp, xc, yc, zc, cm, rcm, mx, m, rcm_on):
+    def cmcalc(AtomList, Coords):
         """
+        CALCULATE REDUCED CM OR MODIFIED FULL CM
         integer :: i,j,m,natm,mx,c
         character(len=2) :: atmtyp(natm)
         real*8 :: xc(natm),yc(natm),zc(natm),z(natm),dist
@@ -77,20 +82,22 @@ class molecule:
         real*8, dimension (m) :: rcm
         logical :: rcm_on
         """
-    
+        natom = len(AtomList)
+
+        xc = Coords
         # convert atom type list to atomic number Z
-        z = atomtype2z(atomtype)
-    
+        z = atomtype2z(AtomList)
+
         # sort by atomic number (z) then loop over sorted indices to create CM
         # Implement this here <----------
-    
+
         # diagonal elements
-        for i in range(natm):
+        for i in range(natom):
             cm[i, i] = 0.5 * z[i] ** 2.4
-    
+
         # OFF DIAGONALS
-        for i in range(natm):
-            for j in range(i, natm):
+        for i in range(natom):
+            for j in range(i, natom):
                 dist = (
                     (xc[i] - xc[j]) ** 2 + (yc[i] - yc[j]) ** 2 + (zc[i] - zc[j]) ** 2
                 ) ** 0.5
@@ -100,9 +107,8 @@ class molecule:
                     cm[i, j] = 0.0
                 # other side of diagonal is equivalent
                 cm[j, i] = cm[i, j]
-                    
+
         """ 
-        #! CALCULATE REDUCED CM OR MODIFIED FULL CM
         106 format(f12.8)
         !OPEN(7,FILE='rcm.dat',FORM="FORMATTED",STATUS="replace")
         !write(7,*) 'CM: ',idx
@@ -124,5 +130,46 @@ class molecule:
         !enddo
         !close(7)
         """
-    
+
         return cm
+
+    def periodicfunc(self, element):
+        """
+        A function to output atomic number for each element in the periodic table
+        """
+        with open("pt.txt") as f:
+            print(f)
+            print(element)
+            for line in f:
+                if line.split()[0] == element:
+                    atomnum = line.split()[1]
+                    break
+        return int(atomnum)
+
+    def coulombmat(self, fname, dim):
+        """
+        This function takes in an xyz input file for a molecule, number of atoms in the biggest molecule  to computes the corresponding coulomb Matrix
+        """
+        xyzfile = open(fname)
+        xyzheader = int(xyzfile.readline())
+        xyzfile.close()
+        i = 0
+        j = 0
+        cij = zeros((dim, dim))
+        chargearray = zeros((xyzheader, 1))
+        xyzmatrix = loadtxt(fname, skiprows=2, usecols=[1, 2, 3])
+        atominfoarray = loadtxt(fname, skiprows=2, dtype=str, usecols=[0])
+        chargearray = [periodicfunc(symbol) for symbol in atominfoarray]
+
+        for i in range(xyzheader):
+            for j in range(xyzheader):
+                if i == j:
+                    cij[i, j] = (
+                        0.5 * chargearray[i] ** 2.4
+                    )  # Diagonal term described by Potential energy of isolated atom
+                else:
+                    dist = linalg.norm(xyzmatrix[i, :] - xyzmatrix[j, :])
+                    cij[i, j] = (
+                        chargearray[i] * chargearray[j] / dist
+                    )  # Pair-wise repulsion
+        return cij
