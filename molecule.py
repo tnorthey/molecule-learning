@@ -2,22 +2,22 @@
 molecule.
 ### Read & write xyz files, convert to Z-matrix, Coulomb matrix,
     transform / sample by normal modes, Z-matrix manipulation
-### Goals:
-✔ read xyz
-- write xyz
-- convert to Z-matrix
-✔ convert to Coulomb matrix (CM)
-- ordered CM
+### Goals (done: -, not done: x)
+- read xyz
+x write xyz
+x convert to Z-matrix
+- convert to Coulomb matrix (CM)
+x ordered CM
 - reduced CM
-- normal mode displacement
-- normal mode sampling
-- Z-matrix displacement
-- Z-matrix sampling
+x normal mode displacement
+x normal mode sampling
+x Z-matrix displacement
+x Z-matrix sampling
 """
-
+######
 import numpy as np
 
-
+######
 class Molecule:
     """methods to manipulate molecules"""
 
@@ -44,21 +44,28 @@ class Molecule:
             chargearray = [self.periodicfunc(symbol) for symbol in atominfoarray]
         return xyzheader, comment, atominfoarray, chargearray, xyzmatrix
 
-    def coulombmat(self, fname, dim):
-        """Reads xyz file, computes Coulomb matrix"""
+    def triangle_cm(self, charges, xyz, dim):
+        """Computes the triangle Coulomb matrix from charges and xyz arrays"""
 
-        xyzheader, _, _, chargearray, xyzmatrix = self.read_xyz(fname)
-        cij = np.zeros((dim, dim))
+        tcm = np.zeros((dim, dim))  # the CM of size dim**2
+        fcm = np.zeros((dim, dim))  # must make sure to np.zeros; fcm=tcm doesn't work.
+        natom = len(charges)  # number of atoms
 
-        for i in range(xyzheader):
-            for j in range(xyzheader):
-                if i == j:
-                    cij[i, j] = (
-                        0.5 * chargearray[i] ** 2.4
-                    )  # Diagonal term described by Potential energy of isolated atom
-                else:
-                    dist = np.linalg.norm(xyzmatrix[i, :] - xyzmatrix[j, :])
-                    cij[i, j] = (
-                        chargearray[i] * chargearray[j] / dist
-                    )  # Pair-wise repulsion
-        return cij
+        for i in range(natom):
+            diag_element = 0.5 * charges[i] ** 2.4  # diagonal elements
+            tcm[i, i] = diag_element
+            fcm[i, i] = diag_element
+            for j in range(i + 1, natom):
+                dist = np.linalg.norm(xyz[i, :] - xyz[j, :])
+                reps = charges[i] * charges[j] / dist  # Pair-wise repulsion
+                tcm[i, j] = reps
+                fcm[i, j] = reps
+                fcm[j, i] = reps  # opposite elements are equal
+        return tcm, fcm
+
+
+    def reduced_cm(self, cm, size):
+        """change CM to reduced CM"""
+        # only 1st row of CM
+        rcm = cm[0:size, 0]
+        return rcm

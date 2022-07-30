@@ -2,9 +2,12 @@ import molecule
 
 # create class object
 m = molecule.Molecule()
+# define stuff
+xyzheader, comment, atomlist, chargelist, xyzmatrix = m.read_xyz("xyz/test.xyz")
+dim = 3
+tcm, fcm = m.triangle_cm(chargelist, xyzmatrix, dim)
 
 def test_read_xyz():
-    xyzheader, comment, atomlist, chargelist, xyzmatrix = m.read_xyz("xyz/test.xyz")
     assert xyzheader == 3, "xyzheader should be 3"
     assert comment.__contains__("test"), "comment should be 'test'"
     assert atomlist[0] == "O", "1st atom should be O"
@@ -19,13 +22,22 @@ def test_periodicfunc():
     assert he == 2, "He should have atom number 2"
     assert c == 6, "C should have atom number 2"
 
-def test_coulombmat():
-    dim = 3
-    cm = m.coulombmat('xyz/test.xyz', dim)
-    # at the moment coulombmat reads an xyz file instead of e.g. an array, I could update
-    # it also has 2nd argument "dim" to pad with 0s, this is ok
-    assert round(cm[0, 0]) == 74, "rounded [0, 0] element != 74"
-    assert cm[0, 1] == 8, "[0, 1] element not != 8"
-    assert cm[1, 0] == 8, "[1, 0] element not != 8"
-    assert cm[-1, -1] == 0.5, "bottom right element != 0.5"
+def test_triangle_cm():
+    print('tcm')
+    print(tcm)
+    assert round(tcm[0, 0]) == 74, "rounded [0, 0] element != 74"
+    assert tcm[0, 1] == 8, "[0, 1] element not != 8"
+    assert tcm[-1, -1] == 0.5, "bottom right element != 0.5"
+    assert tcm[1, 0] == 0, "bottom left diagonal != 0"
+
+#test_triangle_cm()
+
+def test_full_cm():
+    print('fcm')
+    print(fcm)
+    assert fcm[1, 0] == fcm[0, 1], "upper diagonal != lower diagonal"
+    assert fcm[2, 0] == fcm[0, 2], "upper diagonal != lower diagonal"
+    assert fcm[2, 1] == fcm[1, 2], "upper diagonal != lower diagonal"
+
+#test_full_cm()
 
