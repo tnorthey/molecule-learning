@@ -33,6 +33,8 @@ class Molecule:
                     break
         return int(atomnum)
 
+    # read/write xyz files
+
     def read_xyz(self, fname):
         """Read a .xyz file"""
         with open(fname, "r") as xyzfile:
@@ -43,6 +45,25 @@ class Molecule:
             atominfoarray = np.loadtxt(fname, skiprows=2, dtype=str, usecols=[0])
             chargearray = [self.periodicfunc(symbol) for symbol in atominfoarray]
         return xyzheader, comment, atominfoarray, chargearray, xyzmatrix
+
+    def write_xyz(self, fname, comment, atoms, xyz):
+        """Write .xyz file"""
+        natom = len(atoms)
+        xyz = np.transpose(xyz)
+        atoms_xyz = np.transpose(np.append([atoms], xyz, axis=0))
+        with open(fname, "w") as xyzfile:
+            np.savetxt(
+                fname,
+                atoms_xyz,
+                fmt='%s',
+                delimiter="  ",
+                header=str(natom) + "\n" + comment,
+                footer="",
+                comments="",
+            )
+        return
+
+    # Coulomb matrix
 
     def triangle_cm(self, charges, xyz, dim):
         """Computes the triangle Coulomb matrix from charges and xyz arrays"""
@@ -62,7 +83,6 @@ class Molecule:
                 fcm[i, j] = reps
                 fcm[j, i] = reps  # opposite elements are equal
         return tcm, fcm
-
 
     def reduced_cm(self, cm, size):
         """change CM to reduced CM"""

@@ -14,6 +14,14 @@ def test_read_xyz():
     assert chargelist[0] == 8, "1st atomic charge should be 8"
     assert xyzmatrix[0, 0] == 0.0, "Upper left coordinate should be 0.0"
 
+def test_write_xyz():
+    fname = 'out.xyz'
+    comment = 'test'
+    m.write_xyz(fname, comment, atomlist, xyzmatrix)
+    with open(fname) as out:
+        assert out.readline() == "3\n", "1st line of out.xyz != 3"
+        assert out.readline() == "test\n", "2nd line of out.xyz != 'test'"
+
 def test_periodicfunc():
     h = m.periodicfunc("H")
     he = m.periodicfunc("He")
@@ -30,14 +38,10 @@ def test_triangle_cm():
     assert tcm[-1, -1] == 0.5, "bottom right element != 0.5"
     assert tcm[1, 0] == 0, "bottom left diagonal != 0"
 
-#test_triangle_cm()
-
 def test_full_cm():
     print('fcm')
     print(fcm)
     assert fcm[1, 0] == fcm[0, 1], "upper diagonal != lower diagonal"
     assert fcm[2, 0] == fcm[0, 2], "upper diagonal != lower diagonal"
     assert fcm[2, 1] == fcm[1, 2], "upper diagonal != lower diagonal"
-
-#test_full_cm()
 
