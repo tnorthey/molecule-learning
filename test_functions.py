@@ -1,7 +1,7 @@
 import molecule
 
 # create class object
-m = molecule.molecule()
+m = molecule.Molecule()
 
 def test_read_xyz():
     xyzheader, comment, atomlist, chargelist, xyzmatrix = m.read_xyz("xyz/test.xyz")
@@ -24,6 +24,8 @@ def test_coulombmat():
     cm = m.coulombmat('xyz/test.xyz', dim)
     # at the moment coulombmat reads an xyz file instead of e.g. an array, I could update
     # it also has 2nd argument "dim" to pad with 0s, this is ok
-    assert round(cm[0, 0]) == 74, "upper left element doesn't round to 74"
-    assert cm[dim - 1, dim - 1] == 0.5, "bottom right element isn't 0.5"
+    assert round(cm[0, 0]) == 74, "rounded [0, 0] element != 74"
+    assert cm[0, 1] == 8, "[0, 1] element not != 8"
+    assert cm[1, 0] == 8, "[1, 0] element not != 8"
+    assert cm[-1, -1] == 0.5, "bottom right element != 0.5"
 
