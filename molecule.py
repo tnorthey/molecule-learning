@@ -4,10 +4,10 @@ molecule.
     transform / sample by normal modes, Z-matrix manipulation
 ### Goals (done: -, not done: x)
 - read xyz
-x write xyz
+- write xyz
 x convert to Z-matrix
 - convert to Coulomb matrix (CM)
-x ordered CM
+x ability to sort atomlist and xyz by charge (consistently ordered CM)
 - reduced CM
 x normal mode displacement
 x normal mode sampling
@@ -62,6 +62,13 @@ class Molecule:
                 comments="",
             )
         return
+
+    def sort_array(self, tosort, sortbyarray):
+        """sort tosort by sortbyarray (have to be same size)"""
+        indices = np.argsort(sortbyarray)
+        indices = indices[::-1]
+        sorted_array = tosort[indices]
+        return sorted_array
 
     # Coulomb matrix
 

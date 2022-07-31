@@ -22,6 +22,17 @@ def test_write_xyz():
         assert out.readline() == "3\n", "1st line of out.xyz != 3"
         assert out.readline() == "test\n", "2nd line of out.xyz != 'test'"
 
+def test_sort_array():
+    print(chargelist)
+    print(xyzmatrix)
+    xyz = m.sort_array(xyzmatrix, chargelist)
+    print(xyz)
+    print(atomlist)
+    atoms = m.sort_array(atomlist, chargelist)
+    print(atoms)
+
+test_sort_array()
+
 def test_periodicfunc():
     h = m.periodicfunc("H")
     he = m.periodicfunc("He")
