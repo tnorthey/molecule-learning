@@ -1,5 +1,5 @@
 """
-molecule.
+molecule, T. Northey, 2022
 ### Read & write xyz files, convert to Z-matrix, Coulomb matrix,
     transform / sample by normal modes, Z-matrix manipulation
 ### Goals (done: -, not done: x)
@@ -7,9 +7,9 @@ molecule.
 - write xyz
 x convert to Z-matrix
 - convert to Coulomb matrix (CM)
-x ability to sort atomlist and xyz by charge (consistently ordered CM)
+- ability to sort atomlist and xyz by charge (consistently ordered CM)
 - reduced CM
-x normal mode displacement
+- normal mode displacement
 x normal mode sampling
 x Z-matrix displacement
 x Z-matrix sampling
@@ -62,11 +62,6 @@ class Molecule:
             )
         return
 
-    def displace_xyz(self, xyz, displacement, factor):
-        """ displace xyz by displacement * factor
-            xyz and displacement should be same size """
-        return xyz + displacement * factor
-
     def sort_array(self, tosort, sortbyarray):
         """sort tosort by sortbyarray (have to be same size)"""
         indices = np.argsort(sortbyarray)
@@ -117,6 +112,7 @@ class Molecule:
 
         with open(fname, "r") as xyzfile:
             tmp = np.loadtxt(fname)
+
         displacements = np.zeros((nmodes, natoms, 3))
         for i in range(3 * natoms):
             for j in range(nmodes):
@@ -129,3 +125,17 @@ class Molecule:
                     displacements[j, dindex, 2] = tmp[i, j]  # x coordinates
         return displacements
 
+    def displace_xyz(self, xyz, displacement, factor):
+        """displace xyz by displacement * factor
+        xyz and displacement should be same size"""
+        return xyz + displacement * factor
+
+    def nm_displacer(self, xyz, displacements, factors):
+        """displace xyz along all displacements by factors array"""
+        natoms = xyz.shape[0]
+        nmodes = len(factors)
+        summed_displacement = np.zeros(displacements[0, :, :].shape)
+        for i in range(nmodes):
+            summed_displacement += displacements[i, :, :] * factors[i]
+        displaced_xyz = self.displace_xyz(xyz, summed_displacement, 1)
+        return displaced_xyz

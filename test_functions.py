@@ -4,34 +4,36 @@ import molecule
 m = molecule.Molecule()
 # define stuff
 natom = 3
-xyzheader, comment, atomlist, chargelist, xyzmatrix = m.read_xyz("xyz/test.xyz")
+xyzheader, comment, atomlist, chargelist, xyz = m.read_xyz("xyz/test.xyz")
 dim = 3
-tcm, fcm = m.triangle_cm(chargelist, xyzmatrix, dim)
+tcm, fcm = m.triangle_cm(chargelist, xyz, dim)
 
 # normal mode definitions
 nmfile = 'nm/test_normalmodes.txt'
 displacements = m.read_nm_displacements(nmfile, natom)
+displacement = displacements[0,:,:]  # 1st mode displacements
+factor = 1
 
 def test_read_xyz():
     assert xyzheader == 3, "xyzheader should be 3"
     assert comment.__contains__("test"), "comment should be 'test'"
     assert atomlist[0] == "O", "1st atom should be O"
     assert chargelist[0] == 8, "1st atomic charge should be 8"
-    assert xyzmatrix[0, 0] == 0.0, "Upper left coordinate should be 0.0"
+    assert xyz[0, 0] == 0.0, "Upper left coordinate should be 0.0"
 
 def test_write_xyz():
     fname = 'out.xyz'
     comment = 'test'
-    m.write_xyz(fname, comment, atomlist, xyzmatrix)
+    m.write_xyz(fname, comment, atomlist, xyz)
     with open(fname) as out:
         assert out.readline() == "3\n", "1st line of out.xyz != 3"
         assert out.readline() == "test\n", "2nd line of out.xyz != 'test'"
 
 def test_sort_array():
     print(chargelist)
-    print(xyzmatrix)
-    xyz = m.sort_array(xyzmatrix, chargelist)
     print(xyz)
+    xyz_sorted = m.sort_array(xyz, chargelist)
+    print(xyz_sorted)
     print(atomlist)
     atoms = m.sort_array(atomlist, chargelist)
     print(atoms)
@@ -65,9 +67,23 @@ def test_read_nm_displacements():
     assert displacements[1, 1, 0] == 0.58365, "displacements[1, 1, 0] != 0.58365"
 
 def test_displace_xyz():
-    displacement = displacements[0,:,:]  # 1st mode displacements
-    factor = 1
-    xyz = xyzmatrix
     displaced_xyz = m.displace_xyz(xyz, displacement, factor)
     assert displaced_xyz[1, 0] == 0.57028, "displaced_xyz[1, 0] !== 0.57028, for factor %d" % factor
+
+def test_displace_write_xyz():
+    displacement = displacements[0,:,:]  # 1st mode displacements
+    factor = 1
+    displaced_xyz = m.displace_xyz(xyz, displacement, factor)
+    fname = 'xyz/displaced.xyz'
+    comment = 'test'
+    m.write_xyz(fname, comment, atomlist, displaced_xyz)
+    with open(fname) as out:
+        assert out.readline() == "3\n", "1st line of out.xyz != 3"
+        assert out.readline() == "test\n", "2nd line of out.xyz != 'test'"
+
+def test_nm_displacer():
+    factors = [1, 1, 1]
+    displaced_xyz = m.nm_displacer(xyz, displacements, factors)
+    assert round(displaced_xyz[0, 1], 5) == round(xyz[0, 1] + 0.07049 + 0.05016 + 0.00003, 5), "displaced xyz error"
+    assert round(displaced_xyz[1, 0], 5) == round(xyz[1, 0] - 0.42972 + 0.58365 - 0.55484, 5), "displaced xyz error"
 
