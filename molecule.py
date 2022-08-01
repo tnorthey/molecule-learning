@@ -40,10 +40,9 @@ class Molecule:
         with open(fname, "r") as xyzfile:
             xyzheader = int(xyzfile.readline())
             comment = xyzfile.readline()
-            # chargearray = zeros((xyzheader, 1))
-            xyzmatrix = np.loadtxt(fname, skiprows=2, usecols=[1, 2, 3])
-            atominfoarray = np.loadtxt(fname, skiprows=2, dtype=str, usecols=[0])
-            chargearray = [self.periodicfunc(symbol) for symbol in atominfoarray]
+        xyzmatrix = np.loadtxt(fname, skiprows=2, usecols=[1, 2, 3])
+        atominfoarray = np.loadtxt(fname, skiprows=2, dtype=str, usecols=[0])
+        chargearray = [self.periodicfunc(symbol) for symbol in atominfoarray]
         return xyzheader, comment, atominfoarray, chargearray, xyzmatrix
 
     def write_xyz(self, fname, comment, atoms, xyz):
@@ -55,7 +54,7 @@ class Molecule:
             np.savetxt(
                 fname,
                 atoms_xyz,
-                fmt='%s',
+                fmt="%s",
                 delimiter="  ",
                 header=str(natom) + "\n" + comment,
                 footer="",
@@ -96,3 +95,31 @@ class Molecule:
         # only 1st row of CM
         rcm = cm[0:size, 0]
         return rcm
+
+    def read_nm_displacements(self, fname, natoms):
+        """
+        read_nm_displacements: Reads displacement vector from file=fname e.g. 'normalmodes.txt'
+        Inputs: 	natoms (int), total number of atoms
+        Outputs:	displacements, array of displacements, size: (nmodes, natoms, 3)
+        """
+        if natoms == 2:
+            nmodes = 1
+        elif natoms > 2:
+            nmodes = 3 * natoms - 6
+        else:
+            print("ERROR: natoms. Are there < 2 atoms?")
+            return False
+
+        with open(fname, "r") as xyzfile:
+            tmp = np.loadtxt(fname)
+        displacements = np.zeros((nmodes, natoms, 3))
+        for i in range(3 * natoms):
+            for j in range(nmodes):
+                if i % 3 == 0:  # Indices 0,3,6,...
+                    dindex = int(i / 3)
+                    displacements[j, dindex, 0] = tmp[i, j]  # x coordinates
+                elif (i - 1) % 3 == 0:  # Indices 1,4,7,...
+                    displacements[j, dindex, 1] = tmp[i, j]  # x coordinates
+                elif (i - 2) % 3 == 0:  # Indices 2,5,8,...
+                    displacements[j, dindex, 2] = tmp[i, j]  # x coordinates
+        return displacements

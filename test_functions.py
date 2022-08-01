@@ -3,6 +3,7 @@ import molecule
 # create class object
 m = molecule.Molecule()
 # define stuff
+natom = 3
 xyzheader, comment, atomlist, chargelist, xyzmatrix = m.read_xyz("xyz/test.xyz")
 dim = 3
 tcm, fcm = m.triangle_cm(chargelist, xyzmatrix, dim)
@@ -55,4 +56,10 @@ def test_full_cm():
     assert fcm[1, 0] == fcm[0, 1], "upper diagonal != lower diagonal"
     assert fcm[2, 0] == fcm[0, 2], "upper diagonal != lower diagonal"
     assert fcm[2, 1] == fcm[1, 2], "upper diagonal != lower diagonal"
+
+def test_read_nm_displacements():
+    nmfile = 'nm/test_normalmodes.txt'
+    displacements = m.read_nm_displacements(nmfile, natom)
+    assert displacements[0, 0, 1] == 0.07049, "displacements[0, 0, 1] != 0.07049"
+    assert displacements[1, 1, 0] == 0.58365, "displacements[1, 1, 0] != 0.58365"
 
