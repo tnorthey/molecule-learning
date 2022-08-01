@@ -8,6 +8,10 @@ xyzheader, comment, atomlist, chargelist, xyzmatrix = m.read_xyz("xyz/test.xyz")
 dim = 3
 tcm, fcm = m.triangle_cm(chargelist, xyzmatrix, dim)
 
+# normal mode definitions
+nmfile = 'nm/test_normalmodes.txt'
+displacements = m.read_nm_displacements(nmfile, natom)
+
 def test_read_xyz():
     assert xyzheader == 3, "xyzheader should be 3"
     assert comment.__contains__("test"), "comment should be 'test'"
@@ -31,8 +35,7 @@ def test_sort_array():
     print(atomlist)
     atoms = m.sort_array(atomlist, chargelist)
     print(atoms)
-
-test_sort_array()
+    # add assertion ...
 
 def test_periodicfunc():
     h = m.periodicfunc("H")
@@ -58,8 +61,13 @@ def test_full_cm():
     assert fcm[2, 1] == fcm[1, 2], "upper diagonal != lower diagonal"
 
 def test_read_nm_displacements():
-    nmfile = 'nm/test_normalmodes.txt'
-    displacements = m.read_nm_displacements(nmfile, natom)
     assert displacements[0, 0, 1] == 0.07049, "displacements[0, 0, 1] != 0.07049"
     assert displacements[1, 1, 0] == 0.58365, "displacements[1, 1, 0] != 0.58365"
+
+def test_displace_xyz():
+    displacement = displacements[0,:,:]  # 1st mode displacements
+    factor = 1
+    xyz = xyzmatrix
+    displaced_xyz = m.displace_xyz(xyz, displacement, factor)
+    assert displaced_xyz[1, 0] == 0.57028, "displaced_xyz[1, 0] !== 0.57028, for factor %d" % factor
 

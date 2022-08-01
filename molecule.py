@@ -62,6 +62,11 @@ class Molecule:
             )
         return
 
+    def displace_xyz(self, xyz, displacement, factor):
+        """ displace xyz by displacement * factor
+            xyz and displacement should be same size """
+        return xyz + displacement * factor
+
     def sort_array(self, tosort, sortbyarray):
         """sort tosort by sortbyarray (have to be same size)"""
         indices = np.argsort(sortbyarray)
@@ -123,3 +128,4 @@ class Molecule:
                 elif (i - 2) % 3 == 0:  # Indices 2,5,8,...
                     displacements[j, dindex, 2] = tmp[i, j]  # x coordinates
         return displacements
+
