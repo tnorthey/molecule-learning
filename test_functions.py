@@ -20,6 +20,8 @@ factor = 1
 
 # xray testing
 x = xray.Xray()
+qlen = 80
+qvector = np.linspace(0, 10, qlen, endpoint=True)  # q probably in a.u.
 
 def test_read_xyz():
     assert xyzheader == 3, "xyzheader should be 3"
@@ -95,13 +97,12 @@ def test_nm_displacer():
     assert round(displaced_xyz[1, 0], 5) == round(xyz[1, 0] - 0.42972 + 0.58365 - 0.55484, 5), "displaced xyz error"
 
 def test_atomic_factor():
-    qlen = 80
-    qvector = np.linspace(0, 10, qlen, endpoint=True)  # q probably in a.u.
-    atom_number = 0     # atom_number = 0 is hydrogen, etc. (I could rewrite it with a +1)
+    atom_number = 1     # atom_number = 1 is hydrogen, etc.
     atom_factor = x.atomic_factor(atom_number, qvector)
     assert round(atom_factor[0], 3) == 1.0, "H  atomic factor (q = 0) != 1"
-    assert round(x.atomic_factor(1, qvector)[0] , 3) == 2.0, "He atomic factor (q = 0) != 2"
+    assert round(x.atomic_factor(2, qvector)[0] , 3) == 2.0, "He atomic factor (q = 0) != 2"
     
-#def test_iam_calc():
-#    qvector, iam = x.iam_calc(atomlist, xyz)
+def test_iam_calc():
+    iam = x.iam_calc(chargelist, xyz, qvector)
+    assert round(iam[0], 1) == 100.0, "H2O molecular factor (q = 0) != 100"
 

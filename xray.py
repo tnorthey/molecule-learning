@@ -6,8 +6,8 @@ class Xray:
         pass
 
     def atomic_factor(self, atom_number, qvector):
-        """ returns atomic x-ray scattering factor for atom_number, and qvector """
-        # np.array([[1, 2], [3, 4]])
+        """returns atomic x-ray scattering factor for atom_number, and qvector"""
+        # coeffs hard coded here (maybe move to separate file later.)
         aa = np.array(
             [
                 [0.489918, 0.262003, 0.196767, 0.049879],  # hydrogen
@@ -16,7 +16,7 @@ class Xray:
                 [1.5919, 1.1278, 0.5391, 0.7029],  # berylium
                 [2.0545, 1.3326, 1.0979, 0.7068],  # boron
                 [2.3100, 1.0200, 1.5886, 0.8650],  # carbon
-                [12.2126, 3.1322, 2.0125, 1.1663], # nitrogen
+                [12.2126, 3.1322, 2.0125, 1.1663],  # nitrogen
                 [3.0485, 2.2868, 1.5463, 0.8670],  # oxygen
                 [3.5392, 2.6412, 1.5170, 1.0243],  # fluorine
                 [3.9553, 3.1125, 1.4546, 1.1251],  # neon
@@ -46,9 +46,9 @@ class Xray:
                 [3.0387, 0.7426, 31.5472, 85.0886],  # Al
                 [2.4386, 32.3337, 0.6785, 81.6937],  # Siv
                 [1.9067, 27.1570, 0.5260, 68.1645],  # P
-                [1.4679, 22.2151, 0.2536, 56.1720],
+                [1.4679, 22.2151, 0.2536, 56.1720],  # S
             ]
-        )  # S
+        )
 
         cc = np.array(
             [
@@ -75,20 +75,29 @@ class Xray:
         atomfactor = np.zeros(qlen)
         for j in range(qlen):
             for i in range(4):
-                atomfactor[j] += aa[atom_number, i] * np.exp(
-                    -bb[atom_number, i] * (0.25 * qvector[j] / np.pi) ** 2
+                atomfactor[j] += aa[atom_number - 1, i] * np.exp(
+                    -bb[atom_number - 1, i] * (0.25 * qvector[j] / np.pi) ** 2
                 )
-        atomfactor += cc[atom_number]
+        atomfactor += cc[atom_number - 1]
         return atomfactor
 
-    def iam_calc(self, atoms, xyz, qlength):
-        """ calculate IAM scattering curve for molecule atoms, xyz """
-        sfactors = np.load("xray/Scattering_Factors.npy", allow_pickle=True)
-        print(sfactors)
-        # to do
-        qvector = 0
-        iam = 0
-        return qvector, iam
+    def iam_calc(self, atomic_numbers, xyz, qvector):
+        """calculate IAM molecular scattering curve for atoms, xyz, qvector"""
+        natom = len(atomic_numbers)
+        qlen = len(qvector)
+        atomic = np.zeros(qlen)
+        molecular = np.zeros(qlen)
+        for i in range(natom):
+            atomic += self.atomic_factor(atomic_numbers[i], qvector) ** 2
+            for j in range(i + 1, natom):  # j > i
+                fij = np.multiply(
+                    self.atomic_factor(atomic_numbers[i], qvector),
+                    self.atomic_factor(atomic_numbers[j], qvector),
+                )
+                dist = np.linalg.norm(xyz[i, :] - xyz[j, :])
+                molecular += 2 * fij * np.sinc(qvector * dist / np.pi)
+        iam = atomic + molecular
+        return iam
 
     """
     Nq=length(q)],        # length of q
