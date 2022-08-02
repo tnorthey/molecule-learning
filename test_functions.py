@@ -1,4 +1,8 @@
+import numpy as np
+
+# my own modules
 import molecule
+import xray
 
 # create class object
 m = molecule.Molecule()
@@ -14,6 +18,9 @@ displacements = m.read_nm_displacements(nmfile, natom)
 displacement = displacements[0,:,:]  # 1st mode displacements
 factor = 1
 
+# xray testing
+x = xray.Xray()
+
 def test_read_xyz():
     assert xyzheader == 3, "xyzheader should be 3"
     assert comment.__contains__("test"), "comment should be 'test'"
@@ -22,7 +29,7 @@ def test_read_xyz():
     assert xyz[0, 0] == 0.0, "Upper left coordinate should be 0.0"
 
 def test_write_xyz():
-    fname = 'out.xyz'
+    fname = 'xyz/out.xyz'
     comment = 'test'
     m.write_xyz(fname, comment, atomlist, xyz)
     with open(fname) as out:
@@ -75,15 +82,26 @@ def test_displace_write_xyz():
     factor = 1
     displaced_xyz = m.displace_xyz(xyz, displacement, factor)
     fname = 'xyz/displaced.xyz'
-    comment = 'test'
+    comment = 'displaced'
     m.write_xyz(fname, comment, atomlist, displaced_xyz)
     with open(fname) as out:
-        assert out.readline() == "3\n", "1st line of out.xyz != 3"
-        assert out.readline() == "test\n", "2nd line of out.xyz != 'test'"
+        assert out.readline() == "3\n", "1st line of %s != 3" % fname
+        assert out.readline() == "displaced\n", "2nd line of %s != %s" % (fname, comment)
 
 def test_nm_displacer():
     factors = [1, 1, 1]
     displaced_xyz = m.nm_displacer(xyz, displacements, factors)
     assert round(displaced_xyz[0, 1], 5) == round(xyz[0, 1] + 0.07049 + 0.05016 + 0.00003, 5), "displaced xyz error"
     assert round(displaced_xyz[1, 0], 5) == round(xyz[1, 0] - 0.42972 + 0.58365 - 0.55484, 5), "displaced xyz error"
+
+def test_atomic_factor():
+    qlen = 80
+    qvector = np.linspace(0, 10, qlen, endpoint=True)  # q probably in a.u.
+    atom_number = 0     # atom_number = 0 is hydrogen, etc. (I could rewrite it with a +1)
+    atom_factor = x.atomic_factor(atom_number, qvector)
+    assert round(atom_factor[0], 3) == 1.0, "H  atomic factor (q = 0) != 1"
+    assert round(x.atomic_factor(1, qvector)[0] , 3) == 2.0, "He atomic factor (q = 0) != 2"
+    
+#def test_iam_calc():
+#    qvector, iam = x.iam_calc(atomlist, xyz)
 
