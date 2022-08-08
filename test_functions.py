@@ -127,4 +127,8 @@ def test_atomic_factor():
 
 def test_iam_calc():
     iam = x.iam_calc(chargelist, xyz, qvector)
+    print(qvector)
+    print(iam)
     assert round(iam[0], 1) == 100.0, "H2O molecular factor (q = 0) != 100"
+
+test_iam_calc()
