@@ -29,9 +29,14 @@ class Molecule:
         with open("pt.txt") as pt_file:
             for line in pt_file:
                 if line.split()[0] == element:
-                    atomnum = line.split()[1]
-                    break
-        return int(atomnum)
+                    return int(line.split()[1])
+
+    def atomic_mass(self, element):
+        """Outputs atomic mass for each element in the periodic table"""
+        with open("atomic_masses.txt") as am_file:
+            for line in am_file:
+                if line.split()[0] == element:
+                    return line.split()[1]
 
     # read/write xyz files
 
