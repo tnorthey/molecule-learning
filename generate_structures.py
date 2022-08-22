@@ -18,7 +18,7 @@ linear_dist = False
 normal_dist = True
 
 # generate random structures
-nstructures = 100
+nstructures = 9999
 for i in range(nstructures):
     #mass = mi[ int( (i - 1) / 3 ) ]  # int rounds down by default
     #displacement_constant = (mass**.5 * 0.172*freqcm1**.5)**-1
@@ -31,7 +31,7 @@ for i in range(nstructures):
 
     displaced_xyz = m.nm_displacer(xyz, displacements, factors)
 
-    fname = "xyz/generated/%s.xyz" % str(i).zfill(3)
-    comment = "generated: %s" % str(i).zfill(3)
+    fname = "xyz/generated/%s.xyz" % str(i).zfill(4)
+    comment = "generated: %s" % str(i).zfill(4)
     m.write_xyz(fname, comment, atomlist, displaced_xyz)
 

@@ -1,5 +1,5 @@
 # custom
-xyz/generated/*
+xyz/generated/*.xyz
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
