@@ -7,7 +7,8 @@ class Spectra:
         pass
 
     def lorenzian_broaden(self, x, y, xmin, xmax, n, fwhm):
-        """Apply Lorenzian broadening to data y(x), outputs new data with length n and min, max = xmin, xmax"""
+        """Apply Lorenzian broadening (w. FWHM = fwhm) to data y(x),
+        outputs new data with length n and min, max = xmin, xmax"""
         x_new = np.linspace(xmin, xmax, n, endpoint=True)
         y_broadened = np.zeros(n)
 
