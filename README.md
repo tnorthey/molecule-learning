@@ -7,7 +7,10 @@
 │   ├── generated
 │   ├── bagel.inp
 │   ├── bagel.out
-│   └── bagel.out.backup
+│   ├── bagel.out.backup
+│   └── run_all_generated.sh
+├── csv
+│   └── total.csv
 ├── deprecated
 │   ├── atomtype2z.py
 │   ├── chemcoord_readxyz.py
@@ -24,7 +27,8 @@
 │   ├── gaussian_subtract_sinc_water.ipynb
 │   └── Untitled.ipynb
 ├── __pycache__
-│   └── molecule.cpython-39.pyc
+│   ├── molecule.cpython-39.pyc
+│   └── spectra.cpython-39.pyc
 ├── templates
 │   └── bagel_dyson.template
 ├── xray
@@ -41,11 +45,13 @@
 │   ├── out.xyz
 │   └── test.xyz
 ├── atomic_masses.txt
+├── chi_square.py
 ├── generate_bagel_inps.py
 ├── generate_structures.py
 ├── learn.py
 ├── molecule.py
 ├── pt.txt
+├── read_dyson_outputs.py
 ├── README.md
 ├── requirements.txt
 ├── spectra.py
@@ -53,5 +59,5 @@
 ├── test_lorenzian_broaden.ipynb
 └── xray.py
 
-10 directories, 39 files
+11 directories, 773 files
 ```
