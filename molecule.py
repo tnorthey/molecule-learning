@@ -16,6 +16,7 @@ x Z-matrix sampling
 """
 ######
 import numpy as np
+import pandas as pd
 
 ######
 class Molecule:
@@ -60,11 +61,24 @@ class Molecule:
                 fname,
                 atoms_xyz,
                 fmt="%s",
-                delimiter="  ",
+                delimiter=" ",
                 header=str(natom) + "\n" + comment,
                 footer="",
                 comments="",
             )
+        return
+
+    def write_bagel_dyson(self, xyzfile, outfile="bagel_inp.json"):
+        """writes a bagel dyson norm input file based on 
+        bagel_dyson.template with atoms and geometry from xyzfile"""
+        _, _, atoms, _, xyzmatrix = self.read_xyz(xyzfile)
+        bagel_df = pd.read_json(
+            "templates/bagel_dyson.template"
+        )  # read bagel input template as pandas dataframe
+        for k in range(len(atoms)):
+            bagel_df["bagel"][0]["geometry"][k]["atom"] = atoms[k]
+            bagel_df["bagel"][0]["geometry"][k]["xyz"] = xyzmatrix[k, :]
+        bagel_df.to_json(outfile, indent=4)  # this runs in bagel!
         return
 
     def sort_array(self, tosort, sortbyarray):

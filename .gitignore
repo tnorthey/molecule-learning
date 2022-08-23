@@ -1,5 +1,6 @@
 # custom
 xyz/generated/*.xyz
+bagel/generated/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

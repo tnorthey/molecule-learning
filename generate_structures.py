@@ -18,7 +18,7 @@ linear_dist = False
 normal_dist = True
 
 # generate random structures
-nstructures = 9999
+nstructures = 10000
 for i in range(nstructures):
     #mass = mi[ int( (i - 1) / 3 ) ]  # int rounds down by default
     #displacement_constant = (mass**.5 * 0.172*freqcm1**.5)**-1
