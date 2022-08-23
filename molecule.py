@@ -68,6 +68,7 @@ class Molecule:
             )
         return
 
+    # Bagel stuff
     def write_bagel_dyson(self, xyzfile, outfile="bagel_inp.json"):
         """writes a bagel dyson norm input file based on 
         bagel_dyson.template with atoms and geometry from xyzfile"""
@@ -80,6 +81,24 @@ class Molecule:
             bagel_df["bagel"][0]["geometry"][k]["xyz"] = xyzmatrix[k, :]
         bagel_df.to_json(outfile, indent=4)  # this runs in bagel!
         return
+
+    def read_bagel_dyson(self, bagel_dyson_output, max_rows):
+        """read dyson norms and ionisation energies from a bagel dyson output file"""
+        str_find = "Norms^2 of Dyson orbitals approximately indicate the strength of an inization transitions."
+        with open(bagel_dyson_output, "r") as f:
+            for line in f:
+                if str_find in line:    # go to line containing str
+                    out_array = np.loadtxt(     # numpy loadtxt into an array
+                        f,
+                        dtype={
+                            "names": ("from", "-", "to", "energy", "norm"),
+                            "formats": ("i4", "a2", "i4", "f4", "f4"),
+                        },
+                        skiprows = 4,
+                        maxrows = max_rows
+                    )
+        return out_array
+    ### End Bagel stuff 
 
     def sort_array(self, tosort, sortbyarray):
         """sort tosort by sortbyarray (have to be same size)"""
@@ -158,3 +177,4 @@ class Molecule:
             summed_displacement += displacements[i, :, :] * factors[i]
         displaced_xyz = self.displace_xyz(xyz, summed_displacement, 1)
         return displaced_xyz
+
