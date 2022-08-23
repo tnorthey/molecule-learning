@@ -1,6 +1,7 @@
 # custom
 xyz/generated/*.xyz
 bagel/generated/*
+csv/*.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

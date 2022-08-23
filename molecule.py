@@ -85,6 +85,7 @@ class Molecule:
     def read_bagel_dyson(self, bagel_dyson_output, max_rows):
         """read dyson norms and ionisation energies from a bagel dyson output file"""
         str_find = "Norms^2 of Dyson orbitals approximately indicate the strength of an inization transitions."
+        energy, norm = [], []  # define here to avoid return error if str_find isn't found
         with open(bagel_dyson_output, "r") as f:
             for line in f:
                 if str_find in line:    # go to line containing str
@@ -95,9 +96,11 @@ class Molecule:
                             "formats": ("i4", "a2", "i4", "f4", "f4"),
                         },
                         skiprows = 4,
-                        maxrows = max_rows
+                        max_rows = max_rows
                     )
-        return out_array
+                    energy = out_array["energy"]
+                    norm = out_array["norm"]
+        return energy, norm
     ### End Bagel stuff 
 
     def sort_array(self, tosort, sortbyarray):
