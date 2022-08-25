@@ -1,0 +1,81 @@
+  * using 24 threads per process
+
+  ===============================================================
+    BAGEL - Freshly leavened quantum chemistry                   
+  ===============================================================
+
+  *** Geometry ***
+
+  { "atom" : "O", "xyz" : [      0.184334,      0.000000,      0.119452 ] },
+  { "atom" : "C", "xyz" : [      0.335677,      0.000000,      2.649904 ] },
+  { "atom" : "C", "xyz" : [      2.748361,      0.000000,      3.408530 ] },
+  { "atom" : "C", "xyz" : [      4.232171,      0.000000,      1.123089 ] },
+  { "atom" : "C", "xyz" : [      2.557369,      0.000000,     -0.772062 ] },
+  { "atom" : "H", "xyz" : [      2.751427,      0.000000,     -2.781172 ] },
+  { "atom" : "H", "xyz" : [      6.247256,      0.000000,      0.956235 ] },
+  { "atom" : "H", "xyz" : [      3.415980,      0.000000,      5.317114 ] },
+  { "atom" : "H", "xyz" : [     -1.420577,      0.000000,      3.644767 ] },
+
+  Number of auxiliary basis functions:      449
+
+  Since a DF basis is specified, we compute 2- and 3-index integrals:
+    o Being stored without compression. Storage requirement is 0.029 GB
+       - 3-index ints prep                         0.00
+       - 3-index ints                              0.05
+       - 2-index ints                              0.00
+       - computing inverse                         0.08
+        elapsed time:        0.14 sec.
+
+
+  Number of basis functions:       90
+  Number of electrons      :       36
+
+
+    * METHOD: MOLECULE                             0.16
+
+       - Overlap matrix                            0.00
+       - Hcore matrix                              0.00
+       - Overlap orthog                            0.00
+
+  *** RHF ***
+
+  === Nuclear Repulsion ===
+  
+   162.7184827851
+
+      * DIIS with orbital gradients will be used.
+
+       - SCF startup                               0.13
+
+  === RHF iteration (svp) ===
+  
+      0       -228.32139687          0.01367212           0.04
+      1       -228.43523861          0.00640981           0.03
+      2       -228.45308619          0.00151744           0.03
+      3       -228.45465025          0.00038683           0.03
+      4       -228.45472957          0.00011740           0.04
+      5       -228.45473820          0.00002995           0.03
+      6       -228.45473922          0.00001808           0.02
+      7       -228.45473959          0.00000444           0.02
+      8       -228.45473963          0.00000115           0.02
+      9       -228.45473963          0.00000038           0.02
+     10       -228.45473963          0.00000018           0.02
+     11       -228.45473963          0.00000006           0.02
+     12       -228.45473963          0.00000002           0.02
+     13       -228.45473963          0.00000001           0.02
+  
+    * SCF iteration converged.
+
+    * Permanent dipole moment:
+           (   -0.239231,    -0.000000,    -0.155319) a.u.
+
+
+    * METHOD: HF                                   0.48
+
+
+    * METHOD: PRINT                                0.01
+
+
+  
+  ===============================================================
+

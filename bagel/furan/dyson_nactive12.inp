@@ -1,0 +1,63 @@
+{ "bagel": [
+ {
+     "title": "molecule",
+     "basis": "svp",
+     "df_basis": "svp-jkfit",
+     "angstrom": true,
+     "geometry": [
+         {"atom": "O", "xyz" : [ 0.0975451220,        0.0000000000,        0.0632111295] },
+         {"atom": "C", "xyz" : [ 0.1776325803,        0.0000000000,        1.4022686086] },
+         {"atom": "C", "xyz" : [ 1.4543702690,        0.0000000000,        1.8037164678] },
+         {"atom": "C", "xyz" : [ 2.2395684396,        0.0000000000,        0.5943132140] },
+         {"atom": "C", "xyz" : [ 1.3533011656,        0.0000000000,       -0.4085575786] },
+         {"atom": "H", "xyz" : [ 1.4559923521,        0.0000000000,       -1.4717326154] },
+         {"atom": "H", "xyz" : [ 3.3059054286,        0.0000000000,        0.5060176349] },
+         {"atom": "H", "xyz" : [ 1.8076585987,        0.0000000000,        2.8136956948] },
+         {"atom": "H", "xyz" : [-0.7517369560,        0.0000000000,        1.9287274445] }
+     ]
+ },
+
+ {
+     "title"   : "casscf",
+     "nclosed" : 12,
+     "nact"    : 12,
+     "nstate"  : 3,
+     "charge"  : 0,
+     "nspin"   : 0
+ },
+
+ {
+     "title" : "save_ref",
+     "file"  : "furan"
+ },
+
+ {
+     "title"   : "casscf",
+     "nclosed" : 12,
+     "nact"    : 12,
+     "nstate"  : 3,
+     "charge"  : 1,
+     "nspin"   : 1
+ },
+
+ {
+     "title"  : "save_ref",
+     "file"   : "furan+"
+ },
+
+ {
+     "title"   : "dyson",
+     "initial" :
+     {
+         "states" : [0,1],
+         "file"   : "furan"
+     },
+     "final"   :
+     {
+         "states" : [0,1,2],
+         "file"   : "furan+"
+     },
+     "thresh"  : 1.0e-8,
+     "molden_file" : "dyson_orbitals.molden"
+ }
+]}
