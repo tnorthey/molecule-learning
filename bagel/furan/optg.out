@@ -1,0 +1,170 @@
+  * using 24 threads per process
+
+  ===============================================================
+    BAGEL - Freshly leavened quantum chemistry                   
+  ===============================================================
+
+  *** Geometry ***
+
+  { "atom" : "O", "xyz" : [      0.185019,     -0.000000,      0.119937 ] },
+  { "atom" : "C", "xyz" : [      0.327937,     -0.000000,      2.644228 ] },
+  { "atom" : "C", "xyz" : [      2.751959,     -0.000000,      3.406443 ] },
+  { "atom" : "C", "xyz" : [      4.233436,     -0.000000,      1.121415 ] },
+  { "atom" : "C", "xyz" : [      2.549556,      0.000000,     -0.782475 ] },
+  { "atom" : "H", "xyz" : [      2.750619,      0.000000,     -2.805939 ] },
+  { "atom" : "H", "xyz" : [      6.266145,     -0.000000,      0.969696 ] },
+  { "atom" : "H", "xyz" : [      3.419962,     -0.000000,      5.330693 ] },
+  { "atom" : "H", "xyz" : [     -1.432637,      0.000000,      3.661860 ] },
+
+  Number of auxiliary basis functions:      449
+
+  Since a DF basis is specified, we compute 2- and 3-index integrals:
+    o Being stored without compression. Storage requirement is 0.029 GB
+       - 3-index ints prep                         0.00
+       - 3-index ints                              0.06
+       - 2-index ints                              0.00
+       - computing inverse                         0.10
+        elapsed time:        0.17 sec.
+
+
+  Number of basis functions:       90
+  Number of electrons      :       36
+
+
+    * METHOD: MOLECULE                             0.19
+
+    o Connectivitiy analysis
+       bond:       0     1     bond length    2.5283 bohr
+       bond:       0     4     bond length    2.5309 bohr
+       bond:       1     2     bond length    2.5410 bohr
+       bond:       1     8     bond length    2.0335 bohr
+       bond:       2     3     bond length    2.7233 bohr
+       bond:       2     7     bond length    2.0369 bohr
+       bond:       3     4     bond length    2.5417 bohr
+       bond:       3     6     bond length    2.0384 bohr
+       bond:       4     5     bond length    2.0334 bohr
+      Nonredundant internal coordinate generated (dim = 21)
+    * Use approximate Hessian for optimization
+       - Overlap matrix                            0.00
+       - Hcore matrix                              0.00
+       - Overlap orthog                            0.00
+
+  *** RHF ***
+
+  === Nuclear Repulsion ===
+  
+   162.4478241961
+
+      * DIIS with orbital gradients will be used.
+
+       - SCF startup                               0.13
+
+  === RHF iteration (svp) ===
+  
+      0       -228.32145505          0.01364943           0.04
+      1       -228.43531846          0.00643149           0.03
+      2       -228.45338188          0.00151643           0.02
+      3       -228.45495293          0.00037832           0.02
+      4       -228.45502872          0.00011535           0.02
+      5       -228.45503698          0.00002937           0.02
+      6       -228.45503793          0.00001764           0.02
+      7       -228.45503828          0.00000431           0.02
+      8       -228.45503832          0.00000111           0.02
+      9       -228.45503832          0.00000036           0.02
+     10       -228.45503832          0.00000017           0.02
+     11       -228.45503832          0.00000005           0.02
+     12       -228.45503832          0.00000002           0.02
+     13       -228.45503832          0.00000001           0.02
+     14       -228.45503832          0.00000000           0.02
+     15       -228.45503832          0.00000000           0.02
+     16       -228.45503832          0.00000000           0.02
+     17       -228.45503832          0.00000000           0.02
+     18       -228.45503832          0.00000000           0.02
+     19       -228.45503832          0.00000000           0.02
+     20       -228.45503832          0.00000000           0.02
+     21       -228.45503832          0.00000000           0.02
+     22       -228.45503832          0.00000000           0.02
+     23       -228.45503832          0.00000000           0.02
+  
+    * SCF iteration converged.
+
+    * Permanent dipole moment:
+           (   -0.229533,     0.000000,    -0.150500) a.u.
+
+
+  * Nuclear energy gradient
+
+    o Atom   0
+        x         -0.0018576347
+        y          0.0000000000
+        z         -0.0005768603
+    o Atom   1
+        x         -0.0000732799
+        y         -0.0000000000
+        z         -0.0000347173
+    o Atom   2
+        x          0.0009683874
+        y         -0.0000000000
+        z          0.0005449567
+    o Atom   3
+        x         -0.0003856146
+        y         -0.0000000000
+        z         -0.0007689146
+    o Atom   4
+        x          0.0006574058
+        y          0.0000000000
+        z         -0.0007056432
+    o Atom   5
+        x         -0.0001876549
+        y         -0.0000000000
+        z          0.0001044160
+    o Atom   6
+        x          0.0007712381
+        y          0.0000000000
+        z          0.0010130072
+    o Atom   7
+        x         -0.0002028118
+        y          0.0000000000
+        z          0.0001872315
+    o Atom   8
+        x          0.0003099647
+        y          0.0000000000
+        z          0.0002365239
+  * Gradient computed with                              0.15
+
+
+  === Convergence status ===
+
+                         Maximum     Tolerance   Converged?
+  * Gradient            0.001858      0.000300           No
+  * Displacement        0.006112      0.001200           No
+  * Energy change    -228.455038      0.000001           No
+
+
+  *** Geometry optimization started ***
+     iter         energy               grad rms       time
+
+      1       -228.45503832          0.00056405        0.79
+      2       -228.45505058          0.00028511        0.53
+      3       -228.45505499          0.00008218        0.48
+
+
+  *** Geometry ***
+
+  { "atom" : "O", "xyz" : [      0.187609,      0.000000,      0.121616 ] },
+  { "atom" : "C", "xyz" : [      0.327428,      0.000000,      2.644861 ] },
+  { "atom" : "C", "xyz" : [      2.751552,      0.000000,      3.406165 ] },
+  { "atom" : "C", "xyz" : [      4.232786,     -0.000000,      1.121041 ] },
+  { "atom" : "C", "xyz" : [      2.548241,      0.000000,     -0.780783 ] },
+  { "atom" : "H", "xyz" : [      2.751070,     -0.000000,     -2.804451 ] },
+  { "atom" : "H", "xyz" : [      6.262166,     -0.000000,      0.951625 ] },
+  { "atom" : "H", "xyz" : [      3.424066,      0.000000,      5.328570 ] },
+  { "atom" : "H", "xyz" : [     -1.436647,      0.000000,      3.657089 ] },
+
+
+    * METHOD: OPTIMIZE                             1.80
+
+
+  
+  ===============================================================
+

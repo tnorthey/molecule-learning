@@ -1,0 +1,34 @@
+zmat angstroms
+ o
+ c   1 co2     
+ c    2 cc3         1 cco3      
+ c    3 cc4         2 ccc4          1 dih4   
+ c    4 cc5         3 ccc5          2 dih5   
+ h    5 hc6         1 hco6          2 dih6   
+ h    4 hc7         3 hcc7          2 dih7   
+ h    3 hc8         2 hcc8          1 dih8   
+ h    2 hc9         1 hco9          5 dih9   
+variables
+co2         1.380000
+cc3         1.500000
+cco3        109.500
+cc4         1.500000
+ccc4        109.471
+dih4          0.000
+cc5         1.500000
+ccc5        109.471
+dih5          0.000
+hc6         1.070000
+hco6        120.000
+dih6        180.000
+hc7         1.070000
+hcc7        120.000
+dih7        180.000
+hc8         1.070000
+hcc8        120.000
+dih8        180.000
+hc9         1.070000
+hco9        120.000
+dih9        180.000
+constants
+end
