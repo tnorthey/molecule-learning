@@ -137,12 +137,11 @@ class Molecule:
         rcm = cm[0:size, 0]
         return rcm
 
+    ### Normal modes section
     def read_nm_displacements(self, fname, natoms):
-        """
-        read_nm_displacements: Reads displacement vector from file=fname e.g. 'normalmodes.txt'
+        """ read_nm_displacements: Reads displacement vector from file=fname e.g. 'normalmodes.txt'
         Inputs: 	natoms (int), total number of atoms
-        Outputs:	displacements, array of displacements, size: (nmodes, natoms, 3)
-        """
+        Outputs:	displacements, array of displacements, size: (nmodes, natoms, 3) """
         if natoms == 2:
             nmodes = 1
         elif natoms > 2:
@@ -150,10 +149,8 @@ class Molecule:
         else:
             print("ERROR: natoms. Are there < 2 atoms?")
             return False
-
         with open(fname, "r") as xyzfile:
             tmp = np.loadtxt(fname)
-
         displacements = np.zeros((nmodes, natoms, 3))
         for i in range(3 * natoms):
             for j in range(nmodes):
@@ -171,13 +168,27 @@ class Molecule:
         xyz and displacement should be same size"""
         return xyz + displacement * factor
 
-    def nm_displacer(self, xyz, displacements, factors):
+    def nm_displacer(self, xyz, displacements, modes, factors):
         """displace xyz along all displacements by factors array"""
         natoms = xyz.shape[0]
-        nmodes = len(factors)
         summed_displacement = np.zeros(displacements[0, :, :].shape)
-        for i in range(nmodes):
-            summed_displacement += displacements[i, :, :] * factors[i]
+        c = 0
+        for mode in modes:
+            summed_displacement += displacements[mode, :, :] * [factors][c]
+            c += 1
         displaced_xyz = self.displace_xyz(xyz, summed_displacement, 1)
         return displaced_xyz
 
+    def animate_mode(self, mode, xyz_start_file, nmfile, natoms):
+        """make xyz file animation along normal mode"""
+        displacements = self.read_nm_displacements(nmfile, natoms)
+        a = 0.4
+        factor = np.linspace(-a, a, 20, endpoint=True)
+        factor = np.append(factor, np.linspace(a, -a, 20, endpoint=True))
+        _, _, atoms, _, xyz_start = self.read_xyz(xyz_start_file)
+        for k in range(len(factor)):
+            xyz = self.nm_displacer(xyz_start, displacements, [mode], factor[k])
+            xyzfile_out = "animate/mode%i_%s.xyz" % (mode, str(k).zfill(2))
+            self.write_xyz(xyzfile_out, str(factor[k]), atoms, xyz)
+
+    ### End normal modes section
