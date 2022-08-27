@@ -107,7 +107,8 @@ def test_displace_write_xyz():
 
 def test_nm_displacer():
     factors = [1, 1, 1]
-    displaced_xyz = m.nm_displacer(xyz, displacements, factors)
+    modes = [0, 1, 2]
+    displaced_xyz = m.nm_displacer(xyz, displacements, modes, factors)
     assert round(displaced_xyz[0, 1], 5) == round(
         xyz[0, 1] + 0.07049 + 0.05016 + 0.00003, 5
     ), "displaced xyz error"
@@ -132,7 +133,7 @@ def test_iam_calc():
     assert round(iam[0], 1) == 100.0, "H2O molecular factor (q = 0) != 100"
 
 def test_distances_array():
-    dist_array = m.distances_array('xyz/linear.xyz')
+    dist_array = m.distances_array(xyz)
     print(dist_array)
 
 test_distances_array()

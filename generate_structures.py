@@ -6,12 +6,13 @@ import molecule
 m = molecule.Molecule()
 
 # starting coordinates
-xyzheader, comment, atomlist, chargelist, xyz = m.read_xyz("xyz/equilibrium.xyz")
+xyzheader, comment, atomlist, chargelist, xyz = m.read_xyz("xyz/chlorobenzene.xyz")
 
 # read normal modes
-nmfile = "nm/test_normalmodes.txt"
-natom = 3
-nmodes = 3
+nmfile = "nm/chlorobenzene_normalmodes.txt"
+natom = 12
+nmodes = 30
+modes = list(range(0, nmodes))
 a = 0.2
 displacements = m.read_nm_displacements(nmfile, natom)
 linear_dist = False
@@ -29,7 +30,7 @@ for i in range(nstructures):
         factors = np.random.normal(mu, sigma, nmodes) # random factors in normal distribution with standard deviation = a
     print(factors)
 
-    displaced_xyz = m.nm_displacer(xyz, displacements, factors)
+    displaced_xyz = m.nm_displacer(xyz, displacements, modes, factors)
 
     fname = "xyz/generated/%s.xyz" % str(i).zfill(4)
     comment = "generated: %s" % str(i).zfill(4)

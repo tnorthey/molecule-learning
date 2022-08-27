@@ -114,6 +114,8 @@ class Molecule:
 
     def distances_array(self, xyz):
         """Computes matrix of distances from xyz"""
+        print(xyz)
+        print(len(xyz))
         natom = xyz.shape[0]  # number of atoms
         dist_array = np.zeros((natom, natom))  # the array of distances
         for i in range(natom):
@@ -189,7 +191,7 @@ class Molecule:
         summed_displacement = np.zeros(displacements[0, :, :].shape)
         c = 0
         for mode in modes:
-            summed_displacement += displacements[mode, :, :] * [factors][c]
+            summed_displacement += displacements[mode, :, :] * factors[c]
             c += 1
         displaced_xyz = self.displace_xyz(xyz, summed_displacement, 1)
         return displaced_xyz
