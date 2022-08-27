@@ -110,6 +110,21 @@ class Molecule:
         sorted_array = tosort[indices]
         return sorted_array
 
+    ### distances array
+
+    def distances_array(self, xyz):
+        """Computes matrix of distances from xyz"""
+        natom = xyz.shape[0]  # number of atoms
+        dist_array = np.zeros((natom, natom))  # the array of distances
+        for i in range(natom):
+            dist_array[i, i] = 0
+            for j in range(i + 1, natom):
+                dist = np.linalg.norm(xyz[i, :] - xyz[j, :])
+                dist_array[i, j] = dist
+                dist_array[j, i] = dist  # opposite elements are equal
+        return dist_array
+
+
     # Coulomb matrix
 
     def triangle_cm(self, charges, xyz, dim):

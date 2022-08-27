@@ -131,4 +131,8 @@ def test_iam_calc():
     print(iam)
     assert round(iam[0], 1) == 100.0, "H2O molecular factor (q = 0) != 100"
 
-test_iam_calc()
+def test_distances_array():
+    dist_array = m.distances_array('xyz/linear.xyz')
+    print(dist_array)
+
+test_distances_array()
