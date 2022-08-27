@@ -128,12 +128,9 @@ def test_atomic_factor():
 
 def test_iam_calc():
     iam = x.iam_calc(chargelist, xyz, qvector)
-    print(qvector)
-    print(iam)
     assert round(iam[0], 1) == 100.0, "H2O molecular factor (q = 0) != 100"
 
 def test_distances_array():
     dist_array = m.distances_array(xyz)
-    print(dist_array)
+    assert dist_array[1, 2] == 2, "distance between hydrogens != 2"
 
-test_distances_array()
