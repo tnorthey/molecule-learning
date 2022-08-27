@@ -1,0 +1,46 @@
+zmat angstroms
+ c
+ c   1 cc2     
+ c    2 cc3         1 ccc3      
+ c    3 cc4         2 ccc4          1 dih4   
+ c    4 cc5         3 ccc5          2 dih5   
+ c    5 cc6         4 ccc6          3 dih6   
+cl    1 clc7        2 clcc7         3 dih7   
+ h    2 hc8         3 hcc8          4 dih8   
+ h    3 hc9         4 hcc9          5 dih9   
+ h    4 hc10        3 hcc10         2 dih10  
+ h    5 hc11        4 hcc11         3 dih11  
+ h    6 hc12        5 hcc12         4 dih12  
+variables
+cc2         1.500000
+cc3         1.500000
+ccc3        120.000
+cc4         1.500000
+ccc4        120.000
+dih4          0.000
+cc5         1.500000
+ccc5        120.000
+dih5          0.000
+cc6         1.500000
+ccc6        120.000
+dih6          0.000
+clc7        1.740000
+clcc7       120.000
+dih7        180.000
+hc8         1.070000
+hcc8        120.000
+dih8        180.000
+hc9         1.070000
+hcc9        120.000
+dih9        180.000
+hc10        1.070000
+hcc10       120.000
+dih10       180.000
+hc11        1.070000
+hcc11       120.000
+dih11       180.000
+hc12        1.070000
+hcc12       120.000
+dih12       180.000
+constants
+end
